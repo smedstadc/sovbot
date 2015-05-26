@@ -1,89 +1,70 @@
-"""
-An XMPP MUC client.
-This XMPP Client logs in as C{user@example.org}, joins the room
-C{'room@muc.example.org'} using the nick C{'greeter'} and responds to
-greetings addressed to it. If another occupant writes C{'greeter: hello'}, it
-will return the favor.
-This example uses L{MUCClient} instead of the protocol-only
-L{MUCClientProtocol<wokkel.muc.MUCClientProtocol>} so that it can hook into
-its C{receivedGroupChat}. L{MUCClient} implements C{groupChatReceived} and
-makes a distinction between messages setting the subject, messages that a
-part of the room's conversation history, and 'live' messages. In this case,
-we only want to inspect and respond to the 'live' messages.
-"""
+"""SovBot: An Eve bot that spams notifications from the Eve API"""
 
-from twisted.application import service
+import logging
+from twisted.internet import task
 from twisted.python import log
 from twisted.words.protocols.jabber.jid import JID
 from wokkel.client import XMPPClient
 from wokkel.muc import MUCClient
+from twisted.internet import reactor
+import settings
+
 
 # Configuration parameters
 
-THIS_JID = JID('user@example.org')
-ROOM_JID = JID('room@muc.example.org')
-NICK = u'greeter'
-SECRET = 'secret'
-LOG_TRAFFIC = True
+THIS_JID = JID(settings.jid)
+ROOM_JID = JID(settings.room)
+NICKNAME = settings.nickname
+PASSWORD = settings.password
+LOG_TRAFFIC = settings.log_traffic
+TASK_INTERVAL = settings.task_interval
 
-class MUCGreeter(MUCClient):
-    """
-    I join a room and respond to greetings.
-    """
 
-    def __init__(self, roomJID, nick):
+class SovBot(MUCClient):
+    """Joins a room and announces sov notifications every 30 minutes."""
+
+    def __init__(self, room_jid, nick):
         MUCClient.__init__(self)
-        self.roomJID = roomJID
+        self.room_jid = room_jid
         self.nick = nick
-
+        self.looping_task = task.LoopingCall(self.do_task)
 
     def connectionInitialized(self):
-        """
-        Once authorized, join the room.
-        If the join action causes a new room to be created, the room will be
-        locked until configured. Here we will just accept the default
-        configuration by submitting an empty form using L{configure}, which
-        usually results in a public non-persistent room.
-        Alternatively, you would use L{getConfiguration} to retrieve the
-        configuration form, and then submit the filled in form with the
-        required settings using L{configure}, possibly after presenting it to
-        an end-user.
-        """
+        """Once authorized, join the room."""
+        log.msg("Connected...")
+
         def joinedRoom(room):
             if room.locked:
-                # Just accept the default configuration. 
+                log.msg("Room was locked, using default configuration...")
+                # The room will be locked if it didn't exist before we joined it.
+                # Just accept the default configuration. The room will be public and temporary.
                 return self.configure(room.roomJID, {})
 
         MUCClient.connectionInitialized(self)
-
-        d = self.join(self.roomJID, self.nick)
-        d.addCallback(joinedRoom)
-        d.addCallback(lambda _: log.msg("Joined room"))
-        d.addErrback(log.err, "Join failed")
-
+        self.join(self.room_jid, self.nick)
+        log.msg("Joining room...")
+        log.msg("Start looping task...")
+        self.looping_task.start(TASK_INTERVAL)
 
     def receivedGroupChat(self, room, user, message):
-        """
-        Called when a groupchat message was received.
-        Check if the message was addressed to my nick and if it said
-        C{'hello'}. Respond by sending a message to the room addressed to
-        the sender.
-        """
-        if message.body.startswith(self.nick + u":"):
-            nick, text = message.body.split(':', 1)
-            text = text.strip().lower()
-            if text == u'hello':
-                body = u"%s: Hi!" % (user.nick)
-                self.groupChat(self.roomJID, body)
+        """Handle received groupchat messages."""
+        log.msg("Received groupchat...".format(message.body))
+
+    def do_task(self):
+        log.msg("Test Task Ping...")
 
 
-# Set up the Twisted application
+if __name__ == "__main__":
+    # set up logging.
+    logging.basicConfig(filename='sovbot.log', level=logging.DEBUG)
+    logger = logging.getLogger('sovbot')
+    observer = log.PythonLoggingObserver(loggerName='sovbot')
+    observer.start()
 
-application = service.Application("MUC Client")
-
-client = XMPPClient(THIS_JID, SECRET)
-client.logTraffic = LOG_TRAFFIC
-client.setServiceParent(application)
-
-mucHandler = MUCGreeter(ROOM_JID, NICK)
-mucHandler.setHandlerParent(client)
+    # set up client.
+    client = XMPPClient(THIS_JID, PASSWORD)
+    client.logTraffic = LOG_TRAFFIC
+    mucHandler = SovBot(ROOM_JID, NICKNAME)
+    mucHandler.setHandlerParent(client)
+    client.startService()
+    reactor.run()
