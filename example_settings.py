@@ -1,0 +1,5 @@
+keyid = 'my keyid'
+vcode = 'my vcode'
+jid = 'my jid'
+password = 'my password'
+channel ='my channel'
