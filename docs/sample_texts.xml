@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<eveapi version="2">
+  <currentTime>2015-05-26 22:15:28</currentTime>
+  <result>
+    <rowset name="notifications" key="notificationID" columns="notificationID">
+      <row notificationID="514238492"><![CDATA[allianceID: null
+corpID: 98351960
+corpsPresent:
+- allianceID: 99003214
+  corpID: 98276273
+  towers:
+  - moonID: 40288276
+    typeID: 20063
+  - moonID: 40288272
+    typeID: 20063
+  - moonID: 40288260
+    typeID: 20063
+  - moonID: 40288270
+    typeID: 20063
+  - moonID: 40288258
+    typeID: 20063
+- allianceID: 99001861
+  corpID: 1354239874
+  towers:
+  - moonID: 40288285
+    typeID: 20064
+moonID: 40288287
+solarSystemID: 30004558
+typeID: 20064
+]]></row>
+      <row notificationID="514224612"><![CDATA[allianceID: 99001861
+corpID: 677030165
+corpsPresent:
+- allianceID: 99001861
+  corpID: 875512489
+  towers:
+  - moonID: 40288964
+    typeID: 20064
+moonID: 40288974
+solarSystemID: 30004569
+typeID: 12235
+]]></row>
+      <row notificationID="513963504"><![CDATA[aggressorAllianceID: 1354830081
+aggressorCorpID: 98370861
+aggressorID: 95484889
+armorValue: 1.0
+hullValue: 1.0
+shieldValue: 0.9999389788494114
+solarSystemID: 30004562
+]]></row>
+      <row notificationID="513963503"><![CDATA[aggressorAllianceID: 1354830081
+aggressorCorpID: 98370861
+aggressorID: 92265243
+armorValue: 1.0
+hullValue: 1.0
+shieldValue: 0.9999437040381134
+solarSystemID: 30004562
+]]></row>
+      <row notificationID="513963502"><![CDATA[aggressorAllianceID: 1354830081
+aggressorCorpID: 98370861
+aggressorID: 92265243
+armorValue: 1.0
+hullValue: 1.0
+shieldValue: 0.999955018450151
+solarSystemID: 30004562
+]]></row>
+      <row notificationID="513963501"><![CDATA[aggressorAllianceID: 1354830081
+aggressorCorpID: 98370861
+aggressorID: 92265243
+armorValue: 1.0
+hullValue: 1.0
+shieldValue: 0.9999671820216749
+solarSystemID: 30004562
+]]></row>
+      <row notificationID="513963500"><![CDATA[aggressorAllianceID: 1354830081
+aggressorCorpID: 98370861
+aggressorID: 92265243
+armorValue: 1.0
+hullValue: 1.0
+shieldValue: 0.9999801046609884
+solarSystemID: 30004562
+]]></row>
+      <row notificationID="513963499"><![CDATA[aggressorAllianceID: 1354830081
+aggressorCorpID: 98370861
+aggressorID: 92265243
+armorValue: 1.0
+hullValue: 1.0
+shieldValue: 0.9999869752041456
+solarSystemID: 30004562
+]]></row>
+      <row notificationID="513963498"><![CDATA[aggressorAllianceID: 1354830081
+aggressorCorpID: 98370861
+aggressorID: 95484889
+armorValue: 1.0
+hullValue: 1.0
+shieldValue: 0.9999920930516217
+solarSystemID: 30004562
+]]></row>
+      <row notificationID="513832451"><![CDATA[aggressorCorpID: null
+aggressorID: null
+shieldValue: 0.9899416240129587
+solarSystemID: 30004593
+stationID: 61000290
+typeID: 28159
+]]></row>
+    </rowset>
+  </result>
+  <cachedUntil>2025-05-23 22:15:28</cachedUntil>
+</eveapi>

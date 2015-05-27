@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<eveapi version="2">
+  <currentTime>2015-05-26 22:15:27</currentTime>
+  <result>
+    <rowset name="notifications" key="notificationID" columns="notificationID,typeID,senderID,senderName,sentDate,read">
+      <row notificationID="514376597" typeID="10" senderID="1000125" senderName="CONCORD" sentDate="2015-05-26 17:32:00" read="0" />
+      <row notificationID="514358601" typeID="128" senderID="437845561" senderName="Royal Broker" sentDate="2015-05-26 14:33:00" read="0" />
+      <row notificationID="514358323" typeID="16" senderID="437845561" senderName="Royal Broker" sentDate="2015-05-26 14:31:00" read="0" />
+      <row notificationID="514345899" typeID="16" senderID="759687912" senderName="Brad hairday" sentDate="2015-05-26 11:24:00" read="0" />
+      <row notificationID="514337794" typeID="10" senderID="1000125" senderName="CONCORD" sentDate="2015-05-26 09:23:00" read="0" />
+      <row notificationID="514298686" typeID="13" senderID="98043801" senderName="Higher Than Everest" sentDate="2015-05-26 00:53:00" read="1" />
+      <row notificationID="514293678" typeID="8" senderID="1000125" senderName="CONCORD" sentDate="2015-05-25 23:52:00" read="0" />
+      <row notificationID="514238492" typeID="45" senderID="1000137" senderName="DED" sentDate="2015-05-25 17:24:00" read="1" />
+      <row notificationID="514224612" typeID="45" senderID="1000137" senderName="DED" sentDate="2015-05-25 15:31:00" read="1" />
+      <row notificationID="514106895" typeID="10" senderID="1000125" senderName="CONCORD" sentDate="2015-05-24 19:50:00" read="1" />
+      <row notificationID="514105677" typeID="10" senderID="98394690" senderName="Better Legion Holdings." sentDate="2015-05-24 19:43:00" read="1" />
+      <row notificationID="514102930" typeID="34" senderID="1000132" senderName="Secure Commerce Commission" sentDate="2015-05-24 19:28:00" read="1" />
+      <row notificationID="514102929" typeID="138" senderID="561395926" senderName="The Suicide Kings" sentDate="2015-05-24 19:28:00" read="1" />
+      <row notificationID="514070213" typeID="13" senderID="98324401" senderName="Positive Failure" sentDate="2015-05-24 15:40:00" read="1" />
+      <row notificationID="514017409" typeID="10" senderID="1000125" senderName="CONCORD" sentDate="2015-05-24 06:24:00" read="1" />
+      <row notificationID="513967154" typeID="10" senderID="1000125" senderName="CONCORD" sentDate="2015-05-23 22:24:00" read="1" />
+      <row notificationID="513967152" typeID="10" senderID="1000125" senderName="CONCORD" sentDate="2015-05-23 22:24:00" read="1" />
+      <row notificationID="513967150" typeID="10" senderID="1000125" senderName="CONCORD" sentDate="2015-05-23 22:24:00" read="1" />
+      <row notificationID="513963504" typeID="86" senderID="98394690" senderName="Better Legion Holdings." sentDate="2015-05-23 21:57:00" read="1" />
+      <row notificationID="513963503" typeID="86" senderID="98394690" senderName="Better Legion Holdings." sentDate="2015-05-23 21:57:00" read="1" />
+      <row notificationID="513963502" typeID="86" senderID="98394690" senderName="Better Legion Holdings." sentDate="2015-05-23 21:57:00" read="1" />
+      <row notificationID="513963501" typeID="86" senderID="98394690" senderName="Better Legion Holdings." sentDate="2015-05-23 21:57:00" read="1" />
+      <row notificationID="513963500" typeID="86" senderID="98394690" senderName="Better Legion Holdings." sentDate="2015-05-23 21:57:00" read="1" />
+      <row notificationID="513963499" typeID="86" senderID="98394690" senderName="Better Legion Holdings." sentDate="2015-05-23 21:57:00" read="1" />
+      <row notificationID="513963498" typeID="86" senderID="98394690" senderName="Better Legion Holdings." sentDate="2015-05-23 21:57:00" read="1" />
+      <row notificationID="513949386" typeID="43" senderID="1000125" senderName="CONCORD" sentDate="2015-05-23 20:23:00" read="1" />
+      <row notificationID="513832451" typeID="77" senderID="1000137" senderName="DED" sentDate="2015-05-23 01:57:00" read="1" />
+    </rowset>
+  </result>
+  <cachedUntil>2015-05-26 22:45:27</cachedUntil>
+</eveapi>
