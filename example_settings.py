@@ -1,3 +1,4 @@
+# copy this into a 'settings.py' file to configure the bot
 keyid = 'my eve api keyid'
 vcode = 'my eve api vcode'
 jid = 'my jid'
