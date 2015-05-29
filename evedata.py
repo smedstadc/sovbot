@@ -26,8 +26,9 @@ class Stations(db.Entity):
 
 
 db.generate_mapping()
-# quick sanity check demo
+
 if __name__ == "__main__":
+    # quick sanity check demo
     with db_session:
         items = select(item for item in InvTypes if item.typeID in [34, 35, 36, 37])
         for dat in items:

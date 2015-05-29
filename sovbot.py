@@ -3,15 +3,15 @@
 import logging
 import settings
 import requests
-import notifications
 from lxml import etree
+from notification_set import NotificationSet
+from twisted.python import log
+from twisted.internet import reactor
 from twisted.internet.defer import Deferred, failure
 from twisted.internet import task
-from twisted.python import log
 from twisted.words.protocols.jabber.jid import JID
 from wokkel.client import XMPPClient
 from wokkel.muc import MUCClient
-from twisted.internet import reactor
 
 
 
@@ -59,46 +59,56 @@ class SovBot(MUCClient):
 
     def notifications_task(self):
         """This function defines the task which reports notifications from the Eve API every TASK_INTERVAL seconds."""
+        log.msg("Starting notifications task...")
+        notification_set = NotificationSet(SELECTED_TYPES, KEY_ID, VCODE)
         d = Deferred()
-        d.addCallback(self._get_notification_headers)
-        d.addCallbacks(self._extract_header_attributes, self._handle_request_failure)
-        d.addCallbacks(self._get_notification_texts, self._handle_extract_attributes_failure)
-        d.callback("http://api.example.com/endpoint.xml")
+        d.addCallback(self._get_headers)
+        d.addCallback(self._get_texts)
+        d.addCallback(self._build_notifications)
+        d.addCallback(self._fetch_names)
+        d.addCallback(self._send_messages)
+        d.addCallback(self._log_success)
+        d.addErrback(self._log_exceptions)
+        d.callback(notification_set)
 
-    def _get_notification_headers(self, path):
-        log.msg("In _get_notification_headers...")
-        uri = 'http://api.eveonline.com/char/Notifications.xml.aspx'
-        response = requests.get(uri, params={'keyID': KEY_ID, 'vcode': VCODE})
-        result = response.content
-        print result
-        return result
+    def _get_headers(self, notification_set):
+        log.msg("Fetching headers from API...")
+        notification_set.get_headers_xml()
+        return notification_set
 
-    def _handle_request_failure(self, failure):
-        log.msg("In _handle_request_failure...")
+    def _get_texts(self, notification_set):
+        log.msg("Fetching texts from API...")
+        notification_set.get_texts_xml()
+        return notification_set
+
+    def _build_notifications(self, notification_set):
+        log.msg("Building notifications...")
+        notification_set.build_notifications()
+        return notification_set
+
+    def _fetch_names(selfself, notification_set):
+        log.msg("Fetching character names...")
+        notification_set.fetch_character_names()
+        return notification_set
+
+    def _send_messages(self, notification_set):
+        log.msg("Sending notification messages...")
+        # TODO Make the notification_set yield customized message objects for each typeID
+        for message in notification_set.get_messages():
+            body = message
+            self.groupChat(self.room_jid, body)
+        return notification_set
+
+    def _log_success(self, notification_set):
+        log.msg("Task finished successfully.")
+        return True
+
+    def _log_exceptions(self, failure):
         log.msg("Exception:{}".format(failure.getErrorMessage()))
+        log.msg("Traceback:{}".format(failure.getTraceback()))
         body = "Is it just me, or is the internet on fire?"
         self.groupChat(self.room_jid, body)
 
-    def _extract_header_attributes(self, result):
-        log.msg("In _extract_header_attributes...")
-        tree = etree.fromstring(result)
-        result = [row.attrib for row in tree.xpath('result/rowset/row') if row.attrib['typeID'] in SELECTED_TYPES.keys()]
-        for row in result:
-            print row
-        return result
-
-    def _handle_extract_attributes_failure(self, failure):
-        log.msg("In _handle_extract_attributes_failure...")
-        log.msg("Exception:{}".format(failure.getErrorMessage()))
-
-    def _get_notification_texts(self, result):
-        log.msg("In _get_notification_texts...")
-        notification_ids = [row['notificationID'] for row in result]
-        notification_types = {row['notificationID']: row['typeID'] for row in result}
-        log.msg("Fetching texts for IDs {}".format(','.join(notification_ids)))
-        uri = 'http://api.eveonline.com/char/NotificationTexts.xml.aspx'
-        response = requests.get(uri, params={'keyID': KEY_ID, 'vcode': VCODE, 'IDs': ','.join(notification_ids)})
-        print response.content
 
 if __name__ == "__main__":
     # set up logging.

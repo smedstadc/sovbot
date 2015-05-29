@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<eveapi version="2">
+  <currentTime>2015-05-29 06:14:55</currentTime>
+  <result>
+    <rowset name="characters" key="characterID" columns="name,characterID">
+      <row name="Venture Bros. - Small Mining Co." characterID="98359584" />
+      <row name="Chris Nikolai" characterID="91556953" />
+      <row name="Black Legion." characterID="99001861" />
+      <row name="The Suicide Kings" characterID="561395926" />
+      <row name="Requiem Eternal" characterID="99003838" />
+    </rowset>
+  </result>
+  <cachedUntil>2015-06-29 06:14:55</cachedUntil>
+</eveapi>

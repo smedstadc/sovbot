@@ -4,7 +4,7 @@ import pony.orm
 database_path = os.path.join(os.path.dirname(__file__), 'sovbot.sqlite')
 db = pony.orm.Database("sqlite", database_path, create_db=True)
 
-class NotificationHeader(db.Entity):
+class Notification(db.Entity):
     """Pony ORM model for Notification Headers"""
     id = pony.orm.PrimaryKey(int, auto=False)
     type_id = pony.orm.Required(int)

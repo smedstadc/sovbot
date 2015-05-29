@@ -6,10 +6,14 @@ room = 'my room jid'
 nickname = 'my nickname'
 log_traffic = False
 task_interval = 1800.0  # 30 minutes
-selected_types = {'38': 'Sovereignty claim fails (corporation)',
-                  '40': 'Sovereignty bill late (corporation)',
-                  '42': 'Sovereignty claim lost (corporation)',
-                  '44': 'Sovereignty claim acquired (corporation)',
+
+# Reference: https://neweden-dev.com/Char/Notifications#Notification_Types
+# Keys must match notification typeIDs, values can be any short description you like, keeping in mind that they'll be
+# used to generate messages.
+selected_types = {'38': 'Sovereignty claim fails',  # (Corporation version)
+                  '40': 'Sovereignty bill late',  # (Corporation version)
+                  '42': 'Sovereignty claim lost',  # (Corporation version)
+                  '44': 'Sovereignty claim acquired',  # (Corporation version)
                   '45': 'Alliance anchoring alert',
                   '46': 'Alliance structure turns vulnerable',
                   '47': 'Alliance structure turns invulnerable',
