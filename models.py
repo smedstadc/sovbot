@@ -11,10 +11,7 @@ class Notification(sovbot_db.Entity):
     """Pony ORM model for Notification Headers"""
     id = PrimaryKey(int, auto=False)
     type_id = Required(int)
-    read = Required(bool)
-    sender_id = Required(int)
     sent_date = Required(unicode)
-    sender_name = Required(unicode)
 
 sovbot_db.generate_mapping(create_tables=True)
 

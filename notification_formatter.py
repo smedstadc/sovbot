@@ -134,11 +134,11 @@ class NotificationFormatter(object):
             location_name = self.get_system_name(notification)
         type_name = self.get_type_name(notification)
         character_name = self.get_name(notification['body']['aggressorID'])
-        corp_name = self.get_name(notification['body']['corpID'])
+        corp_name = self.get_name(notification['body']['aggresssorCorpID'])
         alliance_name = self.get_name(notification['body']['allianceID'])
-        shield_value = int(float(notification['body']['aggressorAllianceID']['shieldValue']) * 100)
-        armor_value = int(float(notification['body']['aggressorAllianceID']['armorValue']) * 100)
-        hull_value = int(float(notification['body']['aggressorAllianceID']['hullValue']) * 100)
+        shield_value = int(float(notification['body']['shieldValue']) * 100)
+        armor_value = int(float(notification['body']['armorValue']) * 100)
+        hull_value = int(float(notification['body']['hullValue']) * 100)
         message = "[{timestamp}] Tower Alert: {type} under attack at {location}. " \
                   "Shield: {shield}%, Armor: {armor}%, Hull: {hull}%, Attacker: {character} [{alliance}] <{corp}>"\
             .format(timestamp=timestamp, type=type_name, location=location_name, shield=shield_value, armor=armor_value,
@@ -159,9 +159,9 @@ class NotificationFormatter(object):
         timestamp = notification['sentDate']
         system_name = self.get_system_name(notification)
         character_name = self.get_name(notification['body']['aggressorID'])
-        shield_value = int(float(notification['body']['aggressorAllianceID']['shieldValue']) * 100)
+        shield_value = int(float(notification['body']['shieldValue']) * 100)
         type_name = self.get_type_name(notification)
-        message = "[{timestamp}] {type} under attack in {system} by {character}, shield at {shield}%.\n"\
+        message = "[{timestamp}] {type} under attack in {system}. Shield: {shield}%, Attacker: {character}."\
             .format(timestamp=timestamp, type=type_name, system=system_name, character=character_name, shield=shield_value)
         return message
 
@@ -182,9 +182,9 @@ class NotificationFormatter(object):
         timestamp = notification['sentDate']
         system_name = self.get_system_name(notification)
         character_name = self.get_name(notification['body']['aggressorID'])
-        shield_value = int(float(notification['body']['aggressorAllianceID']['shieldValue']) * 100)
-        armor_value = int(float(notification['body']['aggressorAllianceID']['armorValue']) * 100)
-        hull_value = int(float(notification['body']['aggressorAllianceID']['hullValue']) * 100)
+        shield_value = int(float(notification['body']['shieldValue']) * 100)
+        armor_value = int(float(notification['body']['armorValue']) * 100)
+        hull_value = int(float(notification['body']['hullValue']) * 100)
         message = "[{timestamp}] Station under attack in {system}. Shield: {shield}%, Armor: " \
                   "{armor}%, Hull: {hull}%, Attacker: {character}."\
             .format(timestamp=timestamp, system=system_name, character=character_name,
@@ -195,24 +195,30 @@ class NotificationFormatter(object):
         timestamp = notification['sentDate']
         system_name = self.get_system_name(notification)
         character_name = self.get_name(notification['body']['aggressorID'])
+        corp_name = self.get_name(notification['body']['aggressorCorpID'])
+        alliance_name = self.get_name(notification['body']['allianceID'])
         shield_value = int(float(notification['body']['shieldValue']) * 100)
         armor_value = int(float(notification['body']['armorValue']) * 100)
         hull_value = int(float(notification['body']['hullValue']) * 100)
         message = "[{timestamp}] TCU under attack in {system}. Shield: {shield}%, Armor: {armor}%, Hull: {hull}%, " \
-                  "Attacker: {character}.".format(timestamp=timestamp, system=system_name, character=character_name,
-                                                  shield=shield_value, armor=armor_value, hull=hull_value)
+                  "Attacker: {character} [{alliance}] <{corp}>."\
+            .format(timestamp=timestamp, system=system_name, character=character_name, shield=shield_value,
+                    armor=armor_value, hull=hull_value, alliance=alliance_name, corp=corp_name)
         return message
 
     def n87_sbu_under_attack(self, notification):
         timestamp = notification['sentDate']
         system_name = self.get_system_name(notification)
         character_name = self.get_name(notification['body']['aggressorID'])
+        corp_name = self.get_name(notification['body']['aggressorCorpID'])
+        alliance_name = self.get_name(notification['body']['allianceID'])
         shield_value = int(float(notification['body']['shieldValue']) * 100)
         armor_value = int(float(notification['body']['armorValue']) * 100)
         hull_value = int(float(notification['body']['hullValue']) * 100)
         message = "[{timestamp}] SBU under attack in {system}. Shield: {shield}%, Armor: {armor}%, Hull: {hull}%, " \
-                  "Attacker: {character}.".format(timestamp=timestamp, system=system_name, character=character_name,
-                                                  shield=shield_value, armor=armor_value, hull=hull_value)
+                  "Attacker: {character} [{alliance}] <{corp}>."\
+            .format(timestamp=timestamp, system=system_name, character=character_name, shield=shield_value,
+                    armor=armor_value, hull=hull_value, alliance=alliance_name, corp=corp_name)
         return message
 
     def n88_ihub_under_attack(self, notification):
@@ -231,9 +237,9 @@ class NotificationFormatter(object):
         timestamp = notification['sentDate']
         planet_name = self.get_planet_name(notification)
         character_name = self.get_name(notification['body']['aggressorID'])
-        shield_value = int(float(notification['body']['aggressorAllianceID']['shieldValue']) * 100)
-        armor_value = int(float(notification['body']['aggressorAllianceID']['armorValue']) * 100)
-        hull_value = int(float(notification['body']['aggressorAllianceID']['hullValue']) * 100)
+        shield_value = int(float(notification['body']['shieldValue']) * 100)
+        armor_value = int(float(notification['body']['armorValue']) * 100)
+        hull_value = int(float(notification['body']['hullValue']) * 100)
         message = "[{timestamp}] POCO under attack at {location}. Shield: {shield}%, Armor: {armor}%, Hull: {hull}%, " \
                   "Attacker: {character}.".format(timestamp=timestamp, location=planet_name, character=character_name,
                                                   shield=shield_value, armor=armor_value, hull=hull_value)

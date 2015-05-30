@@ -64,7 +64,9 @@ class NotificationSet(object):
                     name_ids.add(self._notifications[key]['body'][id_key])
 
         uri = 'https://api.eveonline.com/eve/CharacterName.xml.aspx'
-        params = {'IDs': ','.join([str(name_id) for name_id in name_ids])}
+        # The `if name_id` clause in the list comprehension below ensures None values can't sneak in and
+        # cause the Eve api to return an error that would prevent us from populating the id->name mapping.
+        params = {'IDs': ','.join([str(name_id) for name_id in name_ids if name_id])}
         response = requests.get(uri, params=params)
         names_tree = etree.fromstring(response.content)
         self._names = {row.attrib['characterID']: row.attrib['name'] for row in names_tree.xpath('result/rowset/row')}
@@ -78,7 +80,9 @@ class NotificationSet(object):
                         .format(type=notification['typeID'], body=notification['body']))
 
                 yield notification_decorator.format(notification)
-                # TODO: Save notifications after the first time they're seen
+                with db_session:
+                    log.msg("Saving notification so it won't be repeated on the next check.")
+                    n = Notification(id=notification['notificationID'], type_id=notification['typeID'], sent_date=notification['sentDate'])
             else:
                 log.msg("Skipping repeat message for {}.".format(notification['notificationID']))
 
