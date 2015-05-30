@@ -74,17 +74,17 @@ class NotificationSet(object):
     def get_messages(self):
         """Yields notification message object for each notification which is new."""
         notification_decorator = NotificationFormatter(self._names)
+        messages = []
         for notification in self._notifications.itervalues():
-            if self._notification_is_new(notification['notificationID']):
-                log.msg("Yielding message for type {type} with body {body}."
-                        .format(type=notification['typeID'], body=notification['body']))
-
-                yield notification_decorator.format(notification)
+            if self._notification_is_new(notification):
+                log.msg("Creating message for type {type} with body {body}.".format(type=notification['typeID'], body=notification['body']))
+                messages.append(notification_decorator.format(notification))
                 with db_session:
-                    log.msg("Saving notification so it won't be repeated on the next check.")
+                    log.msg("Saving notification so it won't be repeated.")
                     n = Notification(id=notification['notificationID'], type_id=notification['typeID'], sent_date=notification['sentDate'])
             else:
                 log.msg("Skipping repeat message for {}.".format(notification['notificationID']))
+        return messages
 
     def _params(self):
         """Helper method used to provide required parameters for API request URIs."""
@@ -95,7 +95,8 @@ class NotificationSet(object):
 
     @staticmethod
     @db_session
-    def _notification_is_new(notification_id):
+    def _notification_is_new(notification):
         """Returns true if a notificationID hasn't been seen before."""
+        notification_id = notification['notificationID']
         n = Notification.get(id=notification_id)
         return bool(n is None)
