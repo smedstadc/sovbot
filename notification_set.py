@@ -32,6 +32,7 @@ class NotificationSet(object):
         uri = 'https://api.eveonline.com/char/Notifications.xml.aspx'
         params = self._params()
         response = requests.get(uri, params=params)
+        log.msg("Incoming Notification Headers XML:\n{content}".format(content=response.content))
         self._headers_tree = etree.fromstring(response.content)
 
     def get_texts_xml(self):
@@ -41,6 +42,7 @@ class NotificationSet(object):
         params = self._params()
         params['IDs'] = ','.join(notification_ids)
         response = requests.get(uri, params=params)
+        log.msg("Incoming Notification Texts XML:\n{content}".format(content=response.content))
         self._texts_tree = etree.fromstring(response.content)
 
     def build_notifications(self):
@@ -59,15 +61,19 @@ class NotificationSet(object):
         name_id_types = ['aggressorAllianceID', 'aggressorCorpID', 'aggressorID', 'corpID', 'allianceID']
         name_ids = set()
         for key in self._notifications.keys():
-            for id_key in name_id_types:
-                if id_key in self._notifications[key]['body']:
-                    name_ids.add(self._notifications[key]['body'][id_key])
+            if 'body' in self._notifications[key]:
+                for id_key in name_id_types:
+                    if id_key in self._notifications[key]['body']:
+                        name_ids.add(self._notifications[key]['body'][id_key])
+            else:
+                log.msg("Tried to get names for a notification without a body: {}".format(self._notifications[key]))
 
         uri = 'https://api.eveonline.com/eve/CharacterName.xml.aspx'
         # The `if name_id` clause in the list comprehension below ensures None values can't sneak in and
-        # cause the Eve api to return an error that would prevent us from populating the id->name mapping.
+        # cause the Eve API to return an error that would prevent us from populating the id->name mapping.
         params = {'IDs': ','.join([str(name_id) for name_id in name_ids if name_id])}
         response = requests.get(uri, params=params)
+        log.msg("Incoming Names XML:\n{content}".format(content=response.content))
         names_tree = etree.fromstring(response.content)
         self._names = {row.attrib['characterID']: row.attrib['name'] for row in names_tree.xpath('result/rowset/row')}
 
