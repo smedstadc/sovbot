@@ -1,9 +1,11 @@
-from models import Notification
 import requests
 import yaml
 from lxml import etree
 from collections import OrderedDict
 from pony.orm import db_session
+from models import Notification
+from twisted.python import log
+from notification_formatter import NotificationFormatter
 
 class NotificationSet(object):
     """Object for processsing notifications from the Eve: Online XML API."""
@@ -53,7 +55,7 @@ class NotificationSet(object):
             self._notifications[attributes['notificationID']]['body'] = yaml.load(row.text)
 
     def fetch_character_names(self):
-        """Fetches names by id from the Eve API and stores them in a dictionary for later use."""
+        """Fetches names by id from the Eve API and stores them in a dictionary for later use in messages."""
         name_id_types = ['aggressorAllianceID', 'aggressorCorpID', 'aggressorID', 'corpID', 'allianceID']
         name_ids = set()
         for key in self._notifications.keys():
@@ -69,13 +71,16 @@ class NotificationSet(object):
 
     def get_messages(self):
         """Yields notification message object for each notification which is new."""
+        notification_decorator = NotificationFormatter(self._names)
         for notification in self._notifications.itervalues():
             if self._notification_is_new(notification['notificationID']):
-                print "Yielding message for {}".format(notification['notificationID'])
-                yield self.selected_types[notification['typeID']]
+                log.msg("Yielding message for type {type} with body {body}."
+                        .format(type=notification['typeID'], body=notification['body']))
+
+                yield notification_decorator.format(notification)
                 # TODO: Save notifications after the first time they're seen
             else:
-                print "Skipping repeat message for {}".format(notification['notificationID'])
+                log.msg("Skipping repeat message for {}.".format(notification['notificationID']))
 
     def _params(self):
         """Helper method used to provide required parameters for API request URIs."""
@@ -90,4 +95,3 @@ class NotificationSet(object):
         """Returns true if a notificationID hasn't been seen before."""
         n = Notification.get(id=notification_id)
         return bool(n is None)
-

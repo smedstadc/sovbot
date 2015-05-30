@@ -2,12 +2,10 @@
 
 import logging
 import settings
-import requests
-from lxml import etree
 from notification_set import NotificationSet
 from twisted.python import log
 from twisted.internet import reactor
-from twisted.internet.defer import Deferred, failure
+from twisted.internet.defer import Deferred
 from twisted.internet import task
 from twisted.words.protocols.jabber.jid import JID
 from wokkel.client import XMPPClient
@@ -27,7 +25,7 @@ SELECTED_TYPES = settings.selected_types
 
 
 class SovBot(MUCClient):
-    """Joins a room and announces sov notifications every 30 minutes."""
+    """Joins a room and announces selected notifications every 30 minutes."""
 
     def __init__(self, room_jid, nick):
         MUCClient.__init__(self)
@@ -93,7 +91,6 @@ class SovBot(MUCClient):
 
     def _send_messages(self, notification_set):
         log.msg("Sending notification messages...")
-        # TODO Make the notification_set yield customized message objects for each typeID
         for message in notification_set.get_messages():
             body = message
             self.groupChat(self.room_jid, body)

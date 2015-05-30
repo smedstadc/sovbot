@@ -29,5 +29,4 @@ selected_types = {'38': 'Sovereignty claim fails',  # (Corporation version)
                   '87': 'Sovereignty Blockade Unit under attack',
                   '88': 'Infrastructure Hub under attack',
                   '93': 'Customs office has been attacked',
-                  '94': 'Customs office has entered reinforced',
-                  '95': 'Customs office has been transferred'}
+                  '94': 'Customs office has entered reinforced'}
