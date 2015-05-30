@@ -109,7 +109,8 @@ class SovBot(MUCClient):
 
 if __name__ == "__main__":
     # set up logging.
-    logging.basicConfig(filename='sovbot.log', level=logging.INFO)
+    FORMAT = '%(asctime)s :: %(message)s'
+    logging.basicConfig(filename='sovbot.log', format=FORMAT, level=logging.INFO)
     observer = log.PythonLoggingObserver(loggerName='sovbot')
     observer.start()
 
