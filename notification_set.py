@@ -25,7 +25,7 @@ class NotificationSet(object):
         self._headers_tree = None
         self._texts_tree = None
         self._notifications = OrderedDict()
-        self._names = None
+        self._names = {}
 
     def get_headers_xml(self):
         """Grabs notification headers from the API and stores them in the object."""
@@ -68,14 +68,19 @@ class NotificationSet(object):
             else:
                 log.msg("Tried to get names for a notification without a body: {}".format(self._notifications[key]))
 
-        uri = 'https://api.eveonline.com/eve/CharacterName.xml.aspx'
         # The `if name_id` clause in the list comprehension below ensures None values can't sneak in and
         # cause the Eve API to return an error that would prevent us from populating the id->name mapping.
-        params = {'IDs': ','.join([str(name_id) for name_id in name_ids if name_id])}
-        response = requests.get(uri, params=params)
-        log.msg("Incoming Names XML:\n{content}".format(content=response.content))
-        names_tree = etree.fromstring(response.content)
-        self._names = {row.attrib['characterID']: row.attrib['name'] for row in names_tree.xpath('result/rowset/row')}
+        name_ids = ','.join([str(name_id) for name_id in name_ids if name_id])
+        log.msg("Collected name IDs ({ids})".format(ids=name_ids))
+        if name_ids:
+            uri = 'https://api.eveonline.com/eve/CharacterName.xml.aspx'
+            params = {'IDs': name_ids}
+            response = requests.get(uri, params=params)
+            log.msg("Incoming Names XML:\n{content}".format(content=response.content))
+            names_tree = etree.fromstring(response.content)
+            self._names = {row.attrib['characterID']: row.attrib['name'] for row in names_tree.xpath('result/rowset/row')}
+        else:
+            log.msg("Skipped requesting names because no valid IDs were collected.")
 
     def get_messages(self):
         """Yields notification message object for each notification which is new."""
