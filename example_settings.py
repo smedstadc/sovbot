@@ -11,7 +11,8 @@ task_interval = 1800.0  # 30 minutes
 # Reference: https://neweden-dev.com/Char/Notifications#Notification_Types
 # Keys must match notification typeIDs, values can be any short description you like, keeping in mind that they'll be
 # used to generate messages.
-selected_types = {'38': 'Sovereignty claim fails',  # (Corporation version)
+selected_types = {
+                  '38': 'Sovereignty claim fails',  # (Corporation version)
                   '40': 'Sovereignty bill late',  # (Corporation version)
                   '42': 'Sovereignty claim lost',  # (Corporation version)
                   '44': 'Sovereignty claim acquired',  # (Corporation version)
@@ -30,4 +31,9 @@ selected_types = {'38': 'Sovereignty claim fails',  # (Corporation version)
                   '87': 'Sovereignty Blockade Unit under attack',
                   '88': 'Infrastructure Hub under attack',
                   '93': 'Customs office has been attacked',
-                  '94': 'Customs office has entered reinforced'}
+                  '94': 'Customs office has entered reinforced',
+                  # '138': 'New Clone Activated',
+                  '147': 'Structure Captured Attempt',
+                  '148': 'Structure Restored',
+                  '149': 'Structure Disabled'
+                 }

@@ -25,11 +25,16 @@ class NotificationFormatter(object):
     @db_session
     def get_type_name(notification):
         """Uses the Eve SDE to produce an item name from an id."""
-        type_id = notification['body']['typeID']
-        type = InvTypes.get(typeID=type_id)
-        if type:
-            return type.typeName
+        if 'typeID' in notification['body']:
+            type_id = notification['body']['typeID']
+        elif 'structureTypeID' in notification['body']:
+            type_id = notification['body']['structureTypeID']
         else:
+            type_id = None
+        try:
+            type = InvTypes.get(typeID=type_id)
+            return type.typeName
+        except (AttributeError, ValueError):
             return 'unknown item'
 
     @staticmethod
@@ -252,6 +257,30 @@ class NotificationFormatter(object):
             .format(timestamp=timestamp, location=planet_name)
         return message
 
+    def n147_entosis_capture_in_progress(self, notification):
+        timestamp = notification['sentDate']
+        system_name = self.get_system_name(notification)
+        type_name = self.get_type_name(notification)
+        message = "[{timestamp}] Entosis capture in progress against {structure} in {system}."\
+            .format(timestamp=timestamp, structure=type_name, system=system_name)
+        return message
+
+    def n148_structure_restored(self, notification):
+        timestamp = notification['sentDate']
+        system_name = self.get_system_name(notification)
+        type_name = self.get_type_name(notification)
+        message = "[{timestamp}] {structure} in {system} has been restored."\
+            .format(timestamp=timestamp, structure=type_name, system=system_name)
+        return message
+
+    def n149_structure_disabled_by_entosis(self, notification):
+        timestamp = notification['sentDate']
+        system_name = self.get_system_name(notification)
+        type_name = self.get_type_name(notification)
+        message = "[{timestamp}] {structure} in {system} has been disabled."\
+            .format(timestamp=timestamp, structure=type_name, system=system_name)
+        return message
+
     # Maps notification typeIDs to the method that handles message creation for that type.
     type_handlers = {'38': n38_sov_claim_fail,
                      '40': n40_sov_bill_late,
@@ -272,4 +301,7 @@ class NotificationFormatter(object):
                      '87': n87_sbu_under_attack,
                      '88': n88_ihub_under_attack,
                      '93': n93_poco_under_attack,
-                     '94': n94_poco_entered_reinforced}
+                     '94': n94_poco_entered_reinforced,
+                     '147': n147_entosis_capture_in_progress,
+                     '148': n148_structure_restored,
+                     '149': n149_structure_disabled_by_entosis}

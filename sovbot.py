@@ -91,7 +91,7 @@ class SovBot(MUCClient):
 
     def _send_messages(self, notification_set):
         log.msg("Sending notification messages...")
-        for message in notification_set.get_messages():
+        for message in reversed(notification_set.get_messages()):
             body = message
             self.groupChat(self.room_jid, body)
         return notification_set

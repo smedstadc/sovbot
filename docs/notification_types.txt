@@ -131,3 +131,7 @@ TypeID	Description
 129	Character Application Reject Message
 130	Character Application Withdraw Message
 137	Team Auction lost
+138 Something About Clones?
+147 Structure Being Entosis Captured
+148 Structure Restored
+149 Structure Disabled
