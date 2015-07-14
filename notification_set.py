@@ -58,7 +58,7 @@ class NotificationSet(object):
 
     def fetch_character_names(self):
         """Fetches names by id from the Eve API and stores them in a dictionary for later use in messages."""
-        name_id_types = ['aggressorAllianceID', 'aggressorCorpID', 'aggressorID', 'corpID', 'allianceID']
+        name_id_types = ['aggressorAllianceID', 'aggressorCorpID', 'aggressorID', 'corpID', 'allianceID', 'charID', 'oldOwnerID', 'newOwnerID']
         name_ids = set()
         for key in self._notifications.keys():
             if 'body' in self._notifications[key]:

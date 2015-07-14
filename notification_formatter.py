@@ -178,9 +178,11 @@ class NotificationFormatter(object):
     def n79_station_conquered(self, notification):
         timestamp = notification['sentDate']
         system_name = self.get_system_name(notification)
-        character_name = self.get_name(notification['body']['aggressorID'])
-        message = "[{timestamp}] Station conquered in {system} by {character}."\
-            .format(timestamp=timestamp, system=system_name, character=character_name)
+        character_name = self.get_name(notification['body']['charID'])
+        old_owner_name = self.get_name(notification['body']['oldOwnerID'])
+        new_owner_name = self.get_name(notification['body']['newOwnerID'])
+        message = "[{timestamp}] Station owned by {old} in {system} was conquered by {character} of {new}."\
+            .format(timestamp=timestamp, old=old_owner_name, system=system_name, character=character_name, new=new_owner_name)
         return message
 
     def n80_station_aggression(self, notification):

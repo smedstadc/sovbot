@@ -1,7 +1,9 @@
-
+nohup.out
 settings.py
 *.pyc
 *.sqlite
 .idea
 *.log
 *.png
+*.md5
+*.bz2
