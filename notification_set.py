@@ -41,14 +41,17 @@ class NotificationSet(object):
         notification_ids = [id for id in notification_ids if self._notification_is_new(id)]
         log.msg("Got {} new notification_ids".format(len(notification_ids)))
         uri = 'https://api.eveonline.com/char/NotificationTexts.xml.aspx'
-        params = self._params()
-        params['IDs'] = ','.join(notification_ids)
-        response = requests.get(uri, params=params)
-        if "<result>" in response.content:
-            log.msg("Incoming Notification Texts XML:\n{content}".format(content=response.content))
-            self._texts_tree = etree.fromstring(response.content)
+        if len(notification_ids) > 0: 
+            params = self._params()
+            params['IDs'] = ','.join(notification_ids)
+            response = requests.get(uri, params=params)
+            if "<result>" in response.content:
+                log.msg("Incoming Notification Texts XML:\n{content}".format(content=response.content))
+                self._texts_tree = etree.fromstring(response.content)
+            else:
+                log.msg("Incoming Notification Texts XML was missing <result></result> block.")
         else:
-            log.msg("Incoming Notification Texts XML was missing <result></result> block.")
+            log.msg("Skipped requesting notification texts because there were no new IDs to fetch.")
 
     def build_notifications(self):
         """Combines data from headers and into a single notificationID indexed hash that can be iterated over."""
@@ -86,6 +89,7 @@ class NotificationSet(object):
             self._names = {row.attrib['characterID']: row.attrib['name'] for row in names_tree.xpath('result/rowset/row')}
         else:
             log.msg("Skipped requesting names because no valid IDs were collected.")
+            self._names = {}
 
     def get_messages(self):
         """Yields notification message object for each notification which is new."""
