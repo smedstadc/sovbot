@@ -1,4 +1,4 @@
-import requests
+﻿import requests
 import yaml
 from lxml import etree
 from collections import OrderedDict
@@ -38,6 +38,7 @@ class NotificationSet(object):
     def get_texts_xml(self):
         """Grabs notification contents from the API and stores them in the object."""
         notification_ids = [row.attrib['notificationID'] for row in self._headers_tree.xpath('result/rowset/row') if row.attrib['typeID'] in self.selected_types.keys()]
+        notification_ids = [id for id in notification_ids if self._notification_is_new(id)]
         uri = 'https://api.eveonline.com/char/NotificationTexts.xml.aspx'
         params = self._params()
         params['IDs'] = ','.join(notification_ids)
@@ -87,7 +88,7 @@ class NotificationSet(object):
         notification_decorator = NotificationFormatter(self._names)
         messages = []
         for notification in self._notifications.itervalues():
-            if self._notification_is_new(notification):
+            if self._notification_is_new(notification['notificationID']):
                 log.msg("Creating message for type {type} with body {body}.".format(type=notification['typeID'], body=notification['body']))
                 messages.append(notification_decorator.format(notification))
                 with db_session:
@@ -106,8 +107,6 @@ class NotificationSet(object):
 
     @staticmethod
     @db_session
-    def _notification_is_new(notification):
+    def _notification_is_new(notification_id):
         """Returns true if a notificationID hasn't been seen before."""
-        notification_id = notification['notificationID']
-        n = Notification.get(id=notification_id)
-        return bool(n is None)
+        return bool(Notification.get(id=notification_id) is None)

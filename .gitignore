@@ -7,3 +7,5 @@ settings.py
 *.png
 *.md5
 *.bz2
+*.pyproj
+.vs/sovbot/v14/.suo
