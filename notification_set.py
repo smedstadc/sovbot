@@ -44,8 +44,11 @@ class NotificationSet(object):
         params = self._params()
         params['IDs'] = ','.join(notification_ids)
         response = requests.get(uri, params=params)
-        log.msg("Incoming Notification Texts XML:\n{content}".format(content=response.content))
-        self._texts_tree = etree.fromstring(response.content)
+        if "<result>" in response.content:
+            log.msg("Incoming Notification Texts XML:\n{content}".format(content=response.content))
+            self._texts_tree = etree.fromstring(response.content)
+        else:
+            log.msg("Incoming Notification Texts XML was missing <result></result> block.")
 
     def build_notifications(self):
         """Combines data from headers and into a single notificationID indexed hash that can be iterated over."""

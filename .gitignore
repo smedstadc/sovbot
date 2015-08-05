@@ -9,3 +9,4 @@ settings.py
 *.bz2
 *.pyproj
 .vs/sovbot/v14/.suo
+*.sln
