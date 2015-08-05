@@ -39,6 +39,7 @@ class NotificationSet(object):
         """Grabs notification contents from the API and stores them in the object."""
         notification_ids = [row.attrib['notificationID'] for row in self._headers_tree.xpath('result/rowset/row') if row.attrib['typeID'] in self.selected_types.keys()]
         notification_ids = [id for id in notification_ids if self._notification_is_new(id)]
+        log.msg("Got {} new notification_ids".format(len(notification_ids)))
         uri = 'https://api.eveonline.com/char/NotificationTexts.xml.aspx'
         params = self._params()
         params['IDs'] = ','.join(notification_ids)
