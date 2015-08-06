@@ -73,8 +73,6 @@ class NotificationSet(object):
                 for id_key in name_id_types:
                     if id_key in self._notifications[key]['body']:
                         name_ids.add(self._notifications[key]['body'][id_key])
-            else:
-                log.msg("Tried to get names for a notification without a body: {}".format(self._notifications[key]))
 
         # The `if name_id` clause in the list comprehension below ensures None values can't sneak in and
         # cause the Eve API to return an error that would prevent us from populating the id->name mapping.
